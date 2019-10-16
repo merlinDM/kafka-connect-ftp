@@ -1,6 +1,6 @@
 package com.eneco.trading.kafka.connect.ftp.source
 
-import com.typesafe.scalalogging.slf4j.StrictLogging
+import com.typesafe.scalalogging.StrictLogging
 import org.apache.commons.net.ftp.{FTPClient, FTPFile}
 import org.scalatest.mockito.MockitoSugar
 import org.mockito.Mockito._

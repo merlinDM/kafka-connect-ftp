@@ -7,15 +7,15 @@ apply plugin: "com.gorylenko.gradle-git-properties"
 
 
 ext {
-    scalaMajorVersion = '2.11'
-    scala = '2.11.7'
+    scalaMajorVersion = '2.12'
+    scala = '2.12.10'
     scalaTestVersion = '3.0.1'
-    scalaLoggingVersion = '2.1.2'
+    scalaLoggingVersion = '3.9.2'
     kafkaVersion = '0.10.2.0'
     avroVersion = '1.7.7'
     slf4jVersion = "1.7.21"
     confluentVersion = '3.2.0'
-    pathikritVersion = '2.16.0'
+    pathikritVersion = '3.8.0'
     ftpserverVersion = '1.0.6'
     commonsNetVersion = '3.5'
     commonsCodecVersion = '1.10'
@@ -29,9 +29,10 @@ compileScala {
 
 dependencies {
     compile "org.scala-lang:scala-library:$scala"
-    compile "com.typesafe.scala-logging:scala-logging-slf4j_$scalaMajorVersion:$scalaLoggingVersion"
+    // https://mvnrepository.com/artifact/com.typesafe.scala-logging/scala-logging
+    compile group: 'com.typesafe.scala-logging', name: 'scala-logging_2.12', version: '3.9.2'
     compile "org.apache.kafka:connect-api:$kafkaVersion"
-    compile "com.github.pathikrit:better-files_2.11:$pathikritVersion"
+    compile "com.github.pathikrit:better-files_2.12:$pathikritVersion"
     compile "org.apache.ftpserver:ftpserver-core:$ftpserverVersion"
     compile "commons-net:commons-net:$commonsNetVersion"
     compile "commons-codec:commons-codec:$commonsCodecVersion"
@@ -67,6 +68,7 @@ buildscript {
 
 configurations.compile {
     exclude group: 'org.slf4j', module: 'log4j-over-slf4j'
+    exclude group: 'com.typesafe.scala-logging', module: 'scala-logging-slf4j'
 }
 
 /*

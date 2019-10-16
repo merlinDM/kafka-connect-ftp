@@ -3,7 +3,7 @@ package com.eneco.trading.kafka.connect.ftp.source
 import java.time.Instant
 import java.util
 
-import com.typesafe.scalalogging.slf4j.StrictLogging
+import com.typesafe.scalalogging.StrictLogging
 import org.apache.kafka.connect.storage.OffsetStorageReader
 
 import scala.collection.JavaConverters._
