@@ -21,6 +21,7 @@ ext {
     commonsCodecVersion = '1.10'
     mockitoVersion = '1.8.4'
     pegdownVersion = '1.4.2'
+    json4sVersion = '3.6.7'
 }
 
 compileScala {
@@ -29,13 +30,13 @@ compileScala {
 
 dependencies {
     compile "org.scala-lang:scala-library:$scala"
-    // https://mvnrepository.com/artifact/com.typesafe.scala-logging/scala-logging
     compile group: 'com.typesafe.scala-logging', name: 'scala-logging_2.12', version: '3.9.2'
     compile "org.apache.kafka:connect-api:$kafkaVersion"
     compile "com.github.pathikrit:better-files_2.12:$pathikritVersion"
     compile "org.apache.ftpserver:ftpserver-core:$ftpserverVersion"
     compile "commons-net:commons-net:$commonsNetVersion"
     compile "commons-codec:commons-codec:$commonsCodecVersion"
+    compile "org.json4s:json4s-jackson_$scalaMajorVersion:$json4sVersion"
 
     testCompile "org.scalatest:scalatest_$scalaMajorVersion:$scalaTestVersion"
     testCompile "org.mockito:mockito-all:$mockitoVersion"
