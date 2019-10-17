@@ -59,8 +59,8 @@ class JsonSourceRecordConverterTest extends FlatSpec {
     res.foreach(record => {
       assert(record.keySchema() == Schema.STRING_SCHEMA)
       assert(record.key().isInstanceOf[String])
-      assert(record.valueSchema() == Schema.BYTES_SCHEMA)
-      assert(record.value().isInstanceOf[Array[Byte]])
+      assert(record.valueSchema() == Schema.STRING_SCHEMA)
+      assert(record.value().isInstanceOf[String])
     })
   }
 

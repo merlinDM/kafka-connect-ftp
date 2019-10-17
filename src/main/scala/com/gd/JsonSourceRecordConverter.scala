@@ -50,8 +50,8 @@ class JsonSourceRecordConverter extends SourceRecordConverter with StrictLogging
             in.topic(),
             Schema.STRING_SCHEMA,
             key,
-            Schema.BYTES_SCHEMA,
-            line.getBytes)
+            Schema.STRING_SCHEMA,
+            line)
         }
       }
     }
