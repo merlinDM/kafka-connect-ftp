@@ -11,7 +11,7 @@ import org.json4s.jackson.JsonMethods._
 
 import scala.util.Try
 
-// to many implicits in scope
+// too many implicits in scope
 import scala.collection.JavaConverters.seqAsJavaListConverter
 
 class JsonSourceRecordConverter extends SourceRecordConverter with StrictLogging {
@@ -28,7 +28,8 @@ class JsonSourceRecordConverter extends SourceRecordConverter with StrictLogging
       case Schema.STRING_SCHEMA =>
 
         in.value().asInstanceOf[String]
-      case _ =>
+      case s =>
+        logger.warn(s"POTENTIAL DATA LOSS: Unexpected value schema $s, returning EMPTY message.")
 
         ""
     }
