@@ -5,7 +5,7 @@ import java.nio.file.{FileSystems, Paths}
 import java.time.{Duration, Instant}
 import java.util
 
-import com.typesafe.scalalogging.slf4j.StrictLogging
+import com.typesafe.scalalogging.StrictLogging
 import org.apache.commons.codec.digest.DigestUtils
 import org.apache.commons.net.ftp.{FTP, FTPClient, FTPFile, FTPReply}
 import org.apache.commons.net.{ProtocolCommandEvent, ProtocolCommandListener}

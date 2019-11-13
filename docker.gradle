@@ -1,0 +1,79 @@
+String containerName = "kafka-00"
+String containerTag = "gd/kafka"
+
+task buildDockerImage(type:Exec) {
+    group "docker"
+
+    workingDir '.'
+
+    commandLine "docker", "build",
+            "-t", containerTag,
+            "."
+}
+
+task findRunningDockerContainer(type:Exec) {
+    group "docker"
+
+    standardOutput = new ByteArrayOutputStream()
+
+    commandLine "docker", "ps",
+            "-f", "name=$containerName",
+            "-q"
+}
+
+task killDockerContainer(type:Exec) {
+    group "docker"
+
+    dependsOn findRunningDockerContainer as Task
+
+    onlyIf {
+        (findRunningDockerContainer as Exec).standardOutput.toByteArray().length > 0
+    }
+
+    commandLine "docker", "kill",
+            containerName
+}
+
+task findAllDockerContainers(type:Exec) {
+    group "docker"
+
+    standardOutput = new ByteArrayOutputStream()
+
+    commandLine "docker", "ps",
+            "-f", "name=$containerName",
+            "-qa"
+}
+
+task rmDockerContainer(type:Exec) {
+    group "docker"
+
+    dependsOn findAllDockerContainers as Task
+
+    onlyIf {
+        (findAllDockerContainers as Exec).standardOutput.toByteArray().length > 0
+    }
+
+    commandLine "docker", "rm",
+            containerName
+}
+
+task cleanDocker(type:Exec) {
+    group "docker"
+
+    dependsOn killDockerContainer as Task, rmDockerContainer as Task
+
+    commandLine "echo", "cleaned up successfully"
+}
+
+task runDockerImage(type:Exec) {
+    group "docker"
+
+    dependsOn cleanDocker as Task, buildDockerImage as Task
+
+    commandLine "docker", "run",
+            "-t",
+            "--name", containerName,
+            "--hostname", containerName,
+            "--network", "streaming-capstone",
+            "$containerTag:latest"
+}

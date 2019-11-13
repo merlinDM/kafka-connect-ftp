@@ -6,7 +6,7 @@ import java.util
 import org.apache.kafka.connect.errors.ConnectException
 import org.apache.kafka.connect.source.{SourceRecord, SourceTask}
 import org.apache.kafka.connect.storage.OffsetStorageReader
-import com.typesafe.scalalogging.slf4j.StrictLogging
+import com.typesafe.scalalogging.StrictLogging
 
 import scala.collection.JavaConverters._
 import scala.collection.immutable.Stream.Empty

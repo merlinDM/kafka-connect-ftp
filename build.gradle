@@ -1,26 +1,38 @@
-apply plugin: 'scala'
-apply plugin: 'maven'
-apply plugin: 'docker'
-apply plugin: 'com.github.maiflai.scalatest'
-apply plugin: 'com.github.johnrengelman.shadow'
-apply plugin: "com.gorylenko.gradle-git-properties"
+buildscript {
+    repositories {
+        jcenter()
+        maven {
+            url 'https://plugins.gradle.org/m2/'
+        }
+    }
+}
 
+plugins {
+    id "com.github.maiflai.scalatest" version "0.25"
+    id 'scala'
+    id 'maven'
+    id 'com.github.johnrengelman.shadow' version "5.2.0"
+    id "com.gorylenko.gradle-git-properties" version "2.2.0"
+}
+
+apply from: 'docker.gradle'
 
 ext {
-    scalaMajorVersion = '2.11'
-    scala = '2.11.7'
+    scalaMajorVersion = '2.12'
+    scala = '2.12.10'
     scalaTestVersion = '3.0.1'
-    scalaLoggingVersion = '2.1.2'
+    scalaLoggingVersion = '3.9.2'
     kafkaVersion = '0.10.2.0'
     avroVersion = '1.7.7'
     slf4jVersion = "1.7.21"
     confluentVersion = '3.2.0'
-    pathikritVersion = '2.16.0'
+    pathikritVersion = '3.8.0'
     ftpserverVersion = '1.0.6'
     commonsNetVersion = '3.5'
     commonsCodecVersion = '1.10'
     mockitoVersion = '1.8.4'
     pegdownVersion = '1.4.2'
+    json4sVersion = '3.6.7'
 }
 
 compileScala {
@@ -29,12 +41,13 @@ compileScala {
 
 dependencies {
     compile "org.scala-lang:scala-library:$scala"
-    compile "com.typesafe.scala-logging:scala-logging-slf4j_$scalaMajorVersion:$scalaLoggingVersion"
+    compile group: 'com.typesafe.scala-logging', name: 'scala-logging_2.12', version: '3.9.2'
     compile "org.apache.kafka:connect-api:$kafkaVersion"
-    compile "com.github.pathikrit:better-files_2.11:$pathikritVersion"
+    compile "com.github.pathikrit:better-files_2.12:$pathikritVersion"
     compile "org.apache.ftpserver:ftpserver-core:$ftpserverVersion"
     compile "commons-net:commons-net:$commonsNetVersion"
     compile "commons-codec:commons-codec:$commonsCodecVersion"
+    compile "org.json4s:json4s-jackson_$scalaMajorVersion:$json4sVersion"
 
     testCompile "org.scalatest:scalatest_$scalaMajorVersion:$scalaTestVersion"
     testCompile "org.mockito:mockito-all:$mockitoVersion"
@@ -50,50 +63,11 @@ repositories {
     maven { url "http://repo.typesafe.com/typesafe/releases/" }
 }
 
-buildscript {
-    repositories {
-        jcenter()
-        maven {
-            url 'https://plugins.gradle.org/m2/'
-        }
-    }
-    dependencies {
-        classpath "com.github.maiflai:gradle-scalatest:0.14"
-        classpath 'se.transmode.gradle:gradle-docker:1.2'
-        classpath 'com.github.jengelman.gradle.plugins:shadow:2.0.1'
-        classpath "gradle.plugin.com.gorylenko.gradle-git-properties:gradle-git-properties:1.4.17"
-    }
-}
-
 configurations.compile {
     exclude group: 'org.slf4j', module: 'log4j-over-slf4j'
-}
-
-/*
- * Gets the version name from the latest Git tag
- */
-def getVersionName = { ->
-    def stdout = new ByteArrayOutputStream()
-    exec {
-        commandLine 'git', 'describe', '--tags'
-        standardOutput = stdout
-    }
-    return stdout.toString().trim()
-}
-
-version = getVersionName()
-
-docker {
-    baseImage 'eneco/kafka-connect-base:0.1.0'
-    maintainer 'Eneco Dev'
+    exclude group: 'com.typesafe.scala-logging', module: 'scala-logging-slf4j'
 }
 
 shadowJar{
     dependsOn test
-}
-
-group = "eneco"
-task buildDocker(type: Docker) {
-    addFile("build/libs/$project.name-$version-all.jar","/usr/local/share/java/$project.name-$version-all.jar")
-    dependsOn shadowJar
 }
