@@ -90,3 +90,21 @@ To override it, create your own implementation of `SourceRecordConverter`, put t
 ```
 ftp.sourcerecordconverter=your.name.space.YourConverter
 ```
+
+Docker
+---------------
+
+To build project, run tests, build, and start Docker image use this command:
+```bash
+./gradlew clean shadowJar runDockerImage
+```
+
+This would run `/container_libs/start-kafka-and-ftp-connect.sh` script inside the container. This script basically waits for 20 seconds for Kafka to set up and starts Kafka Connect.
+
+More information could be found [here](https://hub.docker.com/r/wurstmeister/kafka/).
+
+NOTE: FTP server should be already availiable. For example, you can use this [image](https://hub.docker.com/r/stilliard/pure-ftpd/).
+
+Docker configuration
+---------------
+All connector settings are at `/src/main/resources/`. You can specify Kafka and Zookeper hostnames at ./Dockerfile
